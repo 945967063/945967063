@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from "vue";
+import RandomWallpaper from "./components/RandomWallpaper.vue";
 import RainBackground from "./components/RainBackground.vue";
 
 // 加载状态管理
 const isLoaded = ref(false);
+const isWallpaperLoaded = ref(false);
 // 语言检测
 const isEnglish = ref(false);
 
@@ -48,8 +50,14 @@ onMounted(() => {
     :class="{ loaded: isLoaded }"
     :lang="isEnglish ? 'en' : 'zh'"
   >
-    <!-- 雨滴背景 -->
-    <RainBackground />
+    <!-- 随机壁纸背景 -->
+    <RandomWallpaper @loaded="isWallpaperLoaded = true" />
+
+    <Transition name="rain-fade">
+      <div v-if="!isWallpaperLoaded" class="rain-background" aria-hidden="true">
+        <RainBackground />
+      </div>
+    </Transition>
 
     <!-- 加载动画 -->
     <div class="loading-overlay" :class="{ 'fade-out': isLoaded }">
@@ -107,6 +115,23 @@ body {
   padding: 2rem;
   position: relative;
   overflow: hidden;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.rain-background {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.rain-fade-leave-active {
+  transition: opacity 0.8s ease;
+}
+
+.rain-fade-leave-to {
+  opacity: 0;
 }
 
 /* 加载动画覆盖层 */
@@ -173,7 +198,7 @@ body {
 /* 主内容淡入动画 */
 .main-content {
   opacity: 0;
-  transform: translateY(40px) scale(0.98);
+  transform: translateY(calc(-3vh + 32px)) scale(0.98);
   transition: opacity 1s ease, transform 1s ease;
   z-index: 10;
   position: relative;
@@ -181,13 +206,30 @@ body {
 
 .main-content.fade-in {
   opacity: 1;
-  transform: translateY(0) scale(1);
+  transform: translateY(-3vh) scale(1);
 }
 
 .container {
-  max-width: 600px;
+  max-width: 680px;
   width: 100%;
   text-align: center;
+  position: relative;
+  isolation: isolate;
+}
+
+.container::before {
+  content: "";
+  position: absolute;
+  inset: -3.5rem -5.5rem;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(3, 6, 12, 0.66) 0%,
+    rgba(3, 6, 12, 0.38) 45%,
+    rgba(3, 6, 12, 0) 76%
+  );
+  filter: blur(4px);
 }
 
 /* 个人信息区域 */
@@ -197,22 +239,25 @@ body {
 
 /* 名字样式 - 带动画 */
 .name {
-  font-size: 3.5rem;
-  font-weight: 400;
-  margin-bottom: 1.5rem;
+  font-size: clamp(3rem, 7vw, 4.5rem);
+  font-weight: 500;
+  line-height: 1.1;
+  margin-bottom: 1.35rem;
   background: linear-gradient(
     135deg,
-    #667eea 0%,
-    #764ba2 30%,
-    #f093fb 60%,
-    #667eea 100%
+    #ffffff 0%,
+    #f5e7ff 30%,
+    #d8b4fe 65%,
+    #fff7ff 100%
   );
-  background-size: 200% 200%;
+  background-size: 180% 180%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  letter-spacing: 2px;
-  animation: gradient-flow 8s ease infinite;
+  letter-spacing: 1px;
+  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.72))
+    drop-shadow(0 12px 30px rgba(0, 0, 0, 0.48));
+  animation: gradient-flow 10s ease infinite;
 }
 
 @keyframes gradient-flow {
@@ -226,17 +271,38 @@ body {
 }
 
 .description {
-  font-size: 1.1rem;
-  color: rgba(255, 255, 255, 0.75);
-  margin-bottom: 1rem;
+  max-width: 600px;
+  margin: 0 auto 1.25rem;
+  font-family: "Iowan Old Style", "Palatino Linotype", "Noto Serif SC", serif;
+  font-size: 1.08rem;
+  color: rgba(255, 255, 255, 0.92);
   line-height: 1.9;
-  font-weight: 300;
+  font-weight: 400;
+  font-style: italic;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.92);
 }
 
 .subtitle {
-  font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.35);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.66);
   font-style: italic;
+  letter-spacing: 0.08em;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.88);
+}
+
+.subtitle::before,
+.subtitle::after {
+  content: "";
+  width: 22px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.48));
+}
+
+.subtitle::after {
+  transform: rotate(180deg);
 }
 
 /* 页脚 */
@@ -248,18 +314,23 @@ body {
 
 .copyright {
   font-size: 0.8rem;
-  color: rgba(255, 255, 255, 0.25);
+  color: rgba(255, 255, 255, 0.52);
   font-weight: 300;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.85);
 }
 
 /* 响应式设计 */
 @media (max-width: 768px) {
   .name {
-    font-size: 2.5rem;
+    font-size: clamp(2.75rem, 12vw, 3.4rem);
   }
 
   .description {
     font-size: 1rem;
+  }
+
+  .container::before {
+    inset: -3rem -2rem;
   }
 }
 
@@ -269,11 +340,75 @@ body {
   }
 
   .name {
-    font-size: 2rem;
+    font-size: 2.65rem;
   }
 
   .description {
     font-size: 0.95rem;
+    line-height: 1.8;
+  }
+
+  .subtitle {
+    gap: 0.5rem;
+    font-size: 0.75rem;
+  }
+
+  .subtitle::before,
+  .subtitle::after {
+    width: 14px;
+  }
+}
+
+@media (max-height: 480px) {
+  .minimal-page {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+
+  .main-content {
+    transform: translateY(24px) scale(0.98);
+  }
+
+  .main-content.fade-in {
+    transform: translateY(0) scale(1);
+  }
+
+  .container::before {
+    inset: -1.5rem -4rem;
+  }
+
+  .hero-section {
+    margin-bottom: 0.8rem;
+  }
+
+  .name {
+    font-size: clamp(2.5rem, 14vh, 3.25rem);
+    margin-bottom: 0.8rem;
+  }
+
+  .description {
+    margin-bottom: 0.7rem;
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  .subtitle {
+    font-size: 0.72rem;
+  }
+
+  .footer {
+    margin-top: 0;
+    padding-top: 0.65rem;
+  }
+
+  .copyright {
+    font-size: 0.72rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rain-fade-leave-active {
+    transition: none;
   }
 }
 </style>
