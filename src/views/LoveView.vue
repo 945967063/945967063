@@ -62,106 +62,88 @@ const setupRomanticInteractions = () => {
 
     root.classList.add("is-interactive");
 
-    if (reduceMotion) {
-      return () => root.classList.remove("is-interactive");
+    if (!reduceMotion) {
+      utils.set(".hero-stage", { opacity: 0, scale: 0.985 });
+      utils.set(".eyebrow", { opacity: 0, y: 22 });
+      utils.set(".hero-copy h1 > span", { opacity: 0, y: 24 });
+      utils.set(".title-char", { opacity: 0, y: 64, rotate: 7 });
+      utils.set(".hero-note, .forever-line", { opacity: 0, y: 24 });
+      utils.set(".time-card", { opacity: 0, y: 36, scale: 0.94 });
+      utils.set(".scroll-hint, .interaction-hint", { opacity: 0, y: 14 });
+      utils.set(".love-reactor", { opacity: 0, scale: 0.62 });
+
+      createTimeline({ defaults: { ease: "outExpo" } })
+        .add(".hero-stage", { opacity: 1, scale: 1, duration: 1200 }, 0)
+        .add(".eyebrow", { opacity: 1, y: 0, duration: 800 }, 180)
+        .add(".hero-copy h1 > span", { opacity: 1, y: 0, duration: 850 }, 260)
+        .add(
+          ".title-char",
+          { opacity: 1, y: 0, rotate: 0, duration: 1050, delay: stagger(105) },
+          320,
+        )
+        .add(".hero-note, .forever-line", { opacity: 1, y: 0, duration: 900, delay: stagger(100) }, 560)
+        .add(".time-card", { opacity: 1, y: 0, scale: 1, duration: 1100 }, 430)
+        .add(".love-reactor", { opacity: 1, scale: 1, duration: 1200, ease: "outElastic(1, .55)" }, 680)
+        .add(".scroll-hint, .interaction-hint", { opacity: 1, y: 0, duration: 800 }, 900);
+
+      animate(".interaction-hint", {
+        y: [0, -4, 0],
+        duration: 2200,
+        delay: 1500,
+        loop: true,
+        ease: "inOutSine",
+      });
     }
-
-    utils.set(".hero-stage", { opacity: 0, scale: 0.985 });
-    utils.set(".eyebrow", { opacity: 0, y: 22 });
-    utils.set(".hero-copy h1 > span", { opacity: 0, y: 24 });
-    utils.set(".title-char", { opacity: 0, y: 64, rotate: 7 });
-    utils.set(".hero-note, .forever-line", { opacity: 0, y: 24 });
-    utils.set(".time-card", { opacity: 0, y: 36, scale: 0.94 });
-    utils.set(".scroll-hint, .interaction-hint", { opacity: 0, y: 14 });
-    utils.set(".love-reactor", { opacity: 0, scale: 0.62 });
-
-    createTimeline({ defaults: { ease: "outExpo" } })
-      .add(".hero-stage", { opacity: 1, scale: 1, duration: 1200 }, 0)
-      .add(".eyebrow", { opacity: 1, y: 0, duration: 800 }, 180)
-      .add(".hero-copy h1 > span", { opacity: 1, y: 0, duration: 850 }, 260)
-      .add(
-        ".title-char",
-        { opacity: 1, y: 0, rotate: 0, duration: 1050, delay: stagger(105) },
-        320,
-      )
-      .add(".hero-note, .forever-line", { opacity: 1, y: 0, duration: 900, delay: stagger(100) }, 560)
-      .add(".time-card", { opacity: 1, y: 0, scale: 1, duration: 1100 }, 430)
-      .add(".love-reactor", { opacity: 1, scale: 1, duration: 1200, ease: "outElastic(1, .55)" }, 680)
-      .add(".scroll-hint, .interaction-hint", { opacity: 1, y: 0, duration: 800 }, 900);
-
-    animate(".reactor-orbit-one", {
-      rotate: "1turn",
-      duration: 7800,
-      loop: true,
-      ease: "linear",
-    });
-    animate(".reactor-orbit-two", {
-      rotate: "-1turn",
-      duration: 5600,
-      loop: true,
-      ease: "linear",
-    });
-    animate(".reactor-core", {
-      scale: [1, 1.16, 1],
-      duration: 1450,
-      loop: true,
-      ease: "inOutSine",
-    });
-    animate(".interaction-hint", {
-      y: [0, -4, 0],
-      duration: 2200,
-      delay: 1500,
-      loop: true,
-      ease: "inOutSine",
-    });
 
     const revealTargets = Array.from(
       root.querySelectorAll<HTMLElement>(
         ".section-heading, .memory-note, .letter-stage, .final-stage > *",
       ),
     );
-    utils.set(revealTargets, { opacity: 0, y: 46 });
-    utils.set(".memory-note", { scale: 0.96 });
-
-    const revealElement = (element: HTMLElement) => {
-      const memoryIndex = element.classList.contains("memory-note")
-        ? Array.from(element.parentElement?.children ?? []).indexOf(element)
-        : 0;
-      animate(element, {
-        opacity: 1,
-        y: 0,
-        scale: 1,
-        duration: 950,
-        delay: memoryIndex * 105,
-        ease: "outExpo",
-      });
-    };
-
     let observer: IntersectionObserver | undefined;
-    if ("IntersectionObserver" in window) {
-      observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (!entry.isIntersecting) return;
-            revealElement(entry.target as HTMLElement);
-            observer?.unobserve(entry.target);
-          });
-        },
-        { threshold: 0.14, rootMargin: "0px 0px -5%" },
-      );
-      revealTargets.forEach((element) => observer?.observe(element));
-    } else {
-      revealTargets.forEach(revealElement);
+    if (!reduceMotion) {
+      utils.set(revealTargets, { opacity: 0, y: 46 });
+      utils.set(".memory-note", { scale: 0.96 });
+
+      const revealElement = (element: HTMLElement) => {
+        const memoryIndex = element.classList.contains("memory-note")
+          ? Array.from(element.parentElement?.children ?? []).indexOf(element)
+          : 0;
+        animate(element, {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 950,
+          delay: memoryIndex * 105,
+          ease: "outExpo",
+        });
+      };
+
+      if ("IntersectionObserver" in window) {
+        observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (!entry.isIntersecting) return;
+              revealElement(entry.target as HTMLElement);
+              observer?.unobserve(entry.target);
+            });
+          },
+          { threshold: 0.14, rootMargin: "0px 0px -5%" },
+        );
+        revealTargets.forEach((element) => observer?.observe(element));
+      } else {
+        revealTargets.forEach(revealElement);
+      }
     }
 
-    const cardMotion = timeCard
+    const cardMotion = !reduceMotion && timeCard
       ? createAnimatable(timeCard, {
           x: { duration: 620, ease: "out(3)" },
           y: { duration: 620, ease: "out(3)" },
           rotate: { duration: 760, ease: "out(3)" },
         })
       : undefined;
-    const copyMotion = heroCopy
+    const copyMotion = !reduceMotion && heroCopy
       ? createAnimatable(heroCopy, {
           x: { duration: 720, ease: "out(3)" },
           y: { duration: 720, ease: "out(3)" },
@@ -187,7 +169,19 @@ const setupRomanticInteractions = () => {
     };
 
     let lastTrailTime = 0;
+    let touchGesture:
+      | { pointerId: number; startX: number; startY: number; startedAt: number; moved: boolean }
+      | undefined;
+
     const handlePointerMove = (event: PointerEvent) => {
+      if (touchGesture?.pointerId === event.pointerId) {
+        const distance = Math.hypot(
+          event.clientX - touchGesture.startX,
+          event.clientY - touchGesture.startY,
+        );
+        if (distance > 12) touchGesture.moved = true;
+      }
+
       if (finePointer && heroStage && heroStage.contains(event.target as Node)) {
         const rect = heroStage.getBoundingClientRect();
         const normalizedX = (event.clientX - rect.left) / rect.width - 0.5;
@@ -216,10 +210,9 @@ const setupRomanticInteractions = () => {
       heroStage?.style.removeProperty("--pointer-y");
     };
 
-    const handlePointerDown = (event: PointerEvent) => {
-      if (event.pointerType === "mouse" && event.button !== 0) return;
-      particleFieldRef.value?.burst(event.clientX, event.clientY);
-      createLoveResponse(event.clientX, event.clientY);
+    const triggerLoveEffect = (x: number, y: number) => {
+      particleFieldRef.value?.burst(x, y);
+      createLoveResponse(x, y);
       animate(".love-reactor", {
         scale: [1, 1.2, 1],
         rotate: [0, 2, 0],
@@ -228,14 +221,45 @@ const setupRomanticInteractions = () => {
       });
     };
 
+    const handlePointerDown = (event: PointerEvent) => {
+      if (event.pointerType === "mouse" && event.button !== 0) return;
+      if (event.pointerType === "touch") {
+        touchGesture = {
+          pointerId: event.pointerId,
+          startX: event.clientX,
+          startY: event.clientY,
+          startedAt: event.timeStamp,
+          moved: false,
+        };
+        return;
+      }
+      triggerLoveEffect(event.clientX, event.clientY);
+    };
+
+    const handlePointerUp = (event: PointerEvent) => {
+      if (event.pointerType !== "touch" || touchGesture?.pointerId !== event.pointerId) return;
+      const gesture = touchGesture;
+      touchGesture = undefined;
+      if (gesture.moved || event.timeStamp - gesture.startedAt > 650) return;
+      triggerLoveEffect(event.clientX, event.clientY);
+    };
+
+    const handlePointerCancel = (event: PointerEvent) => {
+      if (touchGesture?.pointerId === event.pointerId) touchGesture = undefined;
+    };
+
     root.addEventListener("pointermove", handlePointerMove);
     root.addEventListener("pointerdown", handlePointerDown);
+    root.addEventListener("pointerup", handlePointerUp);
+    root.addEventListener("pointercancel", handlePointerCancel);
     heroStage?.addEventListener("pointerleave", resetHeroMotion);
 
     return () => {
       observer?.disconnect();
       root.removeEventListener("pointermove", handlePointerMove);
       root.removeEventListener("pointerdown", handlePointerDown);
+      root.removeEventListener("pointerup", handlePointerUp);
+      root.removeEventListener("pointercancel", handlePointerCancel);
       heroStage?.removeEventListener("pointerleave", resetHeroMotion);
       interactionLayer?.replaceChildren();
       root.classList.remove("is-interactive");
@@ -314,11 +338,27 @@ onUnmounted(() => {
           <div class="time-emblem" aria-hidden="true">♥</div>
           <p class="time-kicker">TOGETHER FOR</p>
           <h2 id="timer-title">我们已经相爱</h2>
-          <div class="timer-grid" role="timer" aria-live="polite">
-            <div class="time-unit"><strong>{{ timer.days }}</strong><span>天</span></div>
-            <div class="time-unit"><strong>{{ timer.hours }}</strong><span>小时</span></div>
-            <div class="time-unit"><strong>{{ timer.minutes }}</strong><span>分钟</span></div>
-            <div class="time-unit"><strong>{{ timer.seconds }}</strong><span>秒</span></div>
+          <div class="timer-grid" role="timer" aria-label="我们已经相爱的时间">
+            <div class="time-unit time-days">
+              <small class="unit-code" aria-hidden="true">TOTAL LOVE DAYS</small>
+              <div class="time-value"><strong>{{ timer.days }}</strong><span>天</span></div>
+              <i class="heartbeat-line" aria-hidden="true"></i>
+            </div>
+            <div class="time-unit">
+              <small class="unit-code" aria-hidden="true">HOUR</small>
+              <strong>{{ timer.hours }}</strong>
+              <span>小时</span>
+            </div>
+            <div class="time-unit">
+              <small class="unit-code" aria-hidden="true">MINUTE</small>
+              <strong>{{ timer.minutes }}</strong>
+              <span>分钟</span>
+            </div>
+            <div class="time-unit">
+              <small class="unit-code" aria-hidden="true">SECOND</small>
+              <strong>{{ timer.seconds }}</strong>
+              <span>秒</span>
+            </div>
           </div>
         </aside>
 
@@ -366,7 +406,7 @@ onUnmounted(() => {
           <p>PRIVATE LOVE LETTER</p>
           <b>ONLY FOR YOU</b>
         </div>
-        <div class="letter-seal" aria-hidden="true">♥</div>
+        <div class="letter-seal" aria-hidden="true">♡</div>
         <p class="letter-index">LOVE LETTER · 02</p>
         <div class="letter-copy">
           <span>TO MY ONE AND ONLY</span>
@@ -383,10 +423,15 @@ onUnmounted(() => {
       </section>
 
       <section class="final-stage">
-        <span class="final-heart" aria-hidden="true">♥</span>
-        <p>OUR STORY · TO BE CONTINUED</p>
-        <h2>余生很长，<br />请继续多多指教。</h2>
-        <span class="final-vow">ALWAYS WITH YOU · ALWAYS IN LOVE</span>
+        <span class="final-heart" aria-hidden="true">♡</span>
+        <div class="final-copy">
+          <p>OUR STORY · TO BE CONTINUED</p>
+          <h2>
+            <span>余生很长，</span>
+            <strong>请继续多多指教。</strong>
+          </h2>
+          <span class="final-vow">ALWAYS WITH YOU · ALWAYS IN LOVE</span>
+        </div>
       </section>
     </main>
 
