@@ -10,13 +10,14 @@ interface FloatingHeart {
 }
 
 const startDate = new Date("2015-05-20T00:00:00");
+const heartColors = ["#ff6f91", "#ff9fb4", "#ffd2dc", "#fff0eb", "#f3bfd0"];
 const isWallpaperLoaded = ref(false);
-const buttonText = ref("点击接收我的爱意 ♥");
 const hearts = ref<FloatingHeart[]>([]);
 const timer = ref({ days: "0", hours: "00", minutes: "00", seconds: "00" });
 
 let timerId: number | undefined;
-let feedbackTimerId: number | undefined;
+let heartStartTimerId: number | undefined;
+let heartLoopId: number | undefined;
 let nextHeartId = 0;
 const heartTimerIds = new Set<number>();
 
@@ -42,6 +43,7 @@ const scheduleHeart = (
     const travelY = reduceMotion
       ? -(45 + Math.random() * 65)
       : -(180 + Math.random() * window.innerHeight * 0.65);
+    const heartColor = heartColors[Math.floor(Math.random() * heartColors.length)];
 
     hearts.value.push({
       id,
@@ -53,7 +55,7 @@ const scheduleHeart = (
         "--duration": `${duration}s`,
         "--travel-x": `${travelX}px`,
         "--travel-y": `${travelY}px`,
-        "--heart-color": Math.random() > 0.35 ? "#ff6582" : "#ffd0da",
+        "--heart-color": heartColor,
         "--turn": `${-35 + Math.random() * 70}deg`,
       },
     });
@@ -74,24 +76,36 @@ const createHearts = () => {
   for (let index = 0; index < heartCount; index += 1) {
     scheduleHeart(index, reduceMotion);
   }
+};
 
-  buttonText.value = "爱意已送达 ♥";
-  if (feedbackTimerId !== undefined) window.clearTimeout(feedbackTimerId);
-  feedbackTimerId = window.setTimeout(() => {
-    buttonText.value = "点击接收更多爱意 ♥";
-  }, 2200);
+const startHeartAnimation = () => {
+  if (heartLoopId !== undefined) return;
+
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  createHearts();
+  heartLoopId = window.setInterval(createHearts, reduceMotion ? 1100 : 2200);
+};
+
+const handleWallpaperLoaded = () => {
+  isWallpaperLoaded.value = true;
+  startHeartAnimation();
 };
 
 onMounted(() => {
   document.body.classList.add("love-route");
   updateTimer();
   timerId = window.setInterval(updateTimer, 1000);
+  heartStartTimerId = window.setTimeout(() => {
+    heartStartTimerId = undefined;
+    startHeartAnimation();
+  }, 350);
 });
 
 onUnmounted(() => {
   document.body.classList.remove("love-route");
   if (timerId !== undefined) window.clearInterval(timerId);
-  if (feedbackTimerId !== undefined) window.clearTimeout(feedbackTimerId);
+  if (heartStartTimerId !== undefined) window.clearTimeout(heartStartTimerId);
+  if (heartLoopId !== undefined) window.clearInterval(heartLoopId);
   heartTimerIds.forEach((id) => window.clearTimeout(id));
   heartTimerIds.clear();
 });
@@ -99,7 +113,7 @@ onUnmounted(() => {
 
 <template>
   <div class="love-page">
-    <RandomWallpaper @loaded="isWallpaperLoaded = true" />
+    <RandomWallpaper @loaded="handleWallpaperLoaded" />
 
     <Transition name="rain-fade">
       <div v-if="!isWallpaperLoaded" class="rain-background" aria-hidden="true">
@@ -107,10 +121,18 @@ onUnmounted(() => {
       </div>
     </Transition>
 
+    <div class="romantic-atmosphere" aria-hidden="true">
+      <span class="ambient-orb orb-one"></span>
+      <span class="ambient-orb orb-two"></span>
+      <span class="sparkle sparkle-one">✦</span>
+      <span class="sparkle sparkle-two">✧</span>
+      <span class="sparkle sparkle-three">✦</span>
+    </div>
+
     <main class="story-shell">
       <section class="hero-stage" aria-labelledby="love-title">
         <div class="hero-copy">
-          <p class="eyebrow">OUR STORY · SINCE 2015</p>
+          <p class="eyebrow">A LOVE LETTER · SINCE 2015</p>
           <h1 id="love-title">
             <span>致我最亲爱的</span>
             <strong>老婆</strong><i aria-hidden="true">♥</i>
@@ -118,9 +140,11 @@ onUnmounted(() => {
           <p class="hero-note">
             这不是一封写完就结束的情书，而是我们一起生活、一起变老的开始。
           </p>
+          <p class="forever-line"><span aria-hidden="true">♥</span> LOVE YOU, NOW AND FOREVER</p>
         </div>
 
         <aside class="time-card" aria-labelledby="timer-title">
+          <div class="time-emblem" aria-hidden="true">♥</div>
           <p class="time-kicker">TOGETHER FOR</p>
           <h2 id="timer-title">我们已经相爱</h2>
           <div class="timer-grid" role="timer" aria-live="polite">
@@ -166,6 +190,7 @@ onUnmounted(() => {
       </section>
 
       <section class="letter-stage" aria-labelledby="letter-title">
+        <div class="letter-seal" aria-hidden="true">♥</div>
         <p class="letter-index">LOVE LETTER · 2015—FOREVER</p>
         <div class="letter-copy">
           <span>CHAPTER 02</span>
@@ -177,16 +202,15 @@ onUnmounted(() => {
             无论未来发生什么，我都会一直牵着你的手，和你一起走过每一个春夏秋冬。
           </p>
           <strong>永远爱你。</strong>
+          <small>写于我们相爱的每一天</small>
         </div>
       </section>
 
       <section class="final-stage">
+        <span class="final-heart" aria-hidden="true">♥</span>
         <p>THE BEST IS YET TO COME</p>
         <h2>余生很长，<br />请继续多多指教。</h2>
-        <button class="love-btn" type="button" @click="createHearts">
-          {{ buttonText }}
-        </button>
-        <span class="action-note">点击后，整片天空都会替我说爱你</span>
+        <span class="final-vow">从心动，到白首。</span>
       </section>
     </main>
 
