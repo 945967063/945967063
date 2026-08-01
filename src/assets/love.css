@@ -450,19 +450,40 @@
 
 .hero-copy h1 strong {
   display: inline-flex;
-  color: transparent;
+  color: #dff9ff;
   font-family: "STKaiti", "KaiTi", "FangSong", serif;
   font-size: clamp(6.2rem, 10.5vw, 9rem);
   font-weight: 400;
   letter-spacing: -0.13em;
-  background: linear-gradient(112deg, #ffffff 3%, var(--love-cyan) 36%, #e7d6ff 60%, var(--love-pink) 93%);
-  -webkit-background-clip: text;
-  background-clip: text;
   filter: drop-shadow(0 8px 25px rgba(107, 212, 255, 0.14));
 }
 
 .title-char {
   display: inline-block;
+  color: #dff9ff;
+  text-shadow: 0 0 24px rgba(113, 229, 255, 0.16);
+}
+
+.title-char:nth-child(2) {
+  color: #ffc3e1;
+}
+
+@supports ((-webkit-background-clip: text) or (background-clip: text)) {
+  .title-char {
+    color: #dff9ff;
+    background: linear-gradient(145deg, #ffffff 4%, #9cefff 50%, #cfc5ff 96%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .title-char:nth-child(2) {
+    color: #ffc3e1;
+    background: linear-gradient(145deg, #eee7ff 4%, #e4bbff 40%, #ff8bc8 96%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
 }
 
 .hero-copy h1 > i {
@@ -578,6 +599,20 @@
   font-size: 1rem;
   line-height: 1;
   text-shadow: 0 0 8px white, 0 0 15px var(--love-pink);
+  transform-origin: 50% 58%;
+  will-change: transform, filter;
+  animation:
+    time-crystal-float 2.8s ease-in-out infinite,
+    time-crystal-glow 2.1s ease-in-out infinite alternate;
+}
+
+.time-emblem > span {
+  position: relative;
+  z-index: 1;
+  display: block;
+  transform-origin: center;
+  will-change: transform;
+  animation: time-crystal-heart 1.45s ease-in-out infinite;
 }
 
 .time-emblem::after {
@@ -590,6 +625,56 @@
   border-radius: 50%;
   background: white;
   box-shadow: 0 0 7px var(--love-cyan);
+  animation: time-crystal-glint 1.7s ease-in-out infinite;
+}
+
+@keyframes time-crystal-float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-1deg);
+  }
+
+  50% {
+    transform: translateY(-4px) rotate(1deg);
+  }
+}
+
+@keyframes time-crystal-glow {
+  from {
+    filter: drop-shadow(0 8px 13px rgba(122, 117, 255, 0.24)) brightness(0.96);
+  }
+
+  to {
+    filter: drop-shadow(0 10px 18px rgba(255, 105, 190, 0.48)) brightness(1.14);
+  }
+}
+
+@keyframes time-crystal-heart {
+  0%,
+  100% {
+    transform: scale(0.88);
+  }
+
+  45% {
+    transform: scale(1.2);
+  }
+
+  58% {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes time-crystal-glint {
+  0%,
+  100% {
+    opacity: 0.38;
+    transform: scale(0.7);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.65);
+  }
 }
 
 .time-kicker {
@@ -745,6 +830,53 @@
   transform: translate3d(-100%, -50%, 0);
   will-change: transform, opacity;
   animation: heartbeat-scan-dot 3s linear infinite;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .time-card {
+    transition:
+      border-color 320ms ease,
+      box-shadow 320ms ease;
+  }
+
+  .time-card:hover {
+    border-color: rgba(171, 228, 255, 0.56);
+    box-shadow:
+      0 28px 76px rgba(3, 4, 17, 0.4),
+      0 0 34px rgba(145, 239, 255, 0.08),
+      inset 0 1px rgba(255, 255, 255, 0.14);
+  }
+
+  .time-card:hover .time-emblem {
+    animation-duration: 1.75s, 1.35s;
+  }
+
+  .time-card:hover .time-emblem > span {
+    animation-duration: 0.95s;
+  }
+
+  .time-card:hover .heartbeat-line::after {
+    animation-duration: 1.8s;
+  }
+
+  .time-unit {
+    transition:
+      transform 260ms ease,
+      border-color 260ms ease,
+      box-shadow 260ms ease,
+      background-color 260ms ease;
+  }
+
+  .time-unit:hover {
+    z-index: 2;
+    transform: translateY(-4px);
+    border-color: rgba(145, 239, 255, 0.46);
+    background-color: rgba(15, 21, 51, 0.66);
+    box-shadow:
+      0 10px 28px rgba(4, 8, 29, 0.3),
+      0 0 22px rgba(145, 239, 255, 0.09),
+      inset 0 1px rgba(255, 255, 255, 0.08);
+  }
 }
 
 .scroll-hint,
@@ -1762,13 +1894,11 @@
   }
 
   .tech-scan,
-  .card-scan-line,
   .system-status i,
   .hero-copy h1 > i,
   .sparkle,
   .ambient-orb,
   .scroll-hint span::after,
-  .heartbeat-line::after,
   .final-stage::after {
     animation: none !important;
   }
@@ -1797,6 +1927,26 @@
     animation-duration: 3.8s, 4.8s;
   }
 
+  .time-emblem {
+    animation-duration: 5s, 4s;
+  }
+
+  .time-emblem > span {
+    animation-duration: 2.8s;
+  }
+
+  .time-emblem::after {
+    animation-duration: 3.2s;
+  }
+
+  .card-scan-line {
+    animation-duration: 12s;
+  }
+
+  .heartbeat-line::after {
+    animation-duration: 6s;
+  }
+
   .letter-seal::before,
   .final-heart::before {
     animation-duration: 9s;
@@ -1805,5 +1955,27 @@
   .letter-seal::after,
   .final-heart::after {
     animation-duration: 3.5s;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) and (hover: hover) and (pointer: fine) {
+  .time-card:hover .time-emblem {
+    animation-duration: 4.2s, 3.6s;
+  }
+
+  .time-card:hover .time-emblem > span {
+    animation-duration: 2.2s;
+  }
+
+  .time-card:hover .heartbeat-line::after {
+    animation-duration: 4.5s;
+  }
+
+  .time-unit {
+    transition-duration: 480ms;
+  }
+
+  .time-unit:hover {
+    transform: translateY(-2px);
   }
 }

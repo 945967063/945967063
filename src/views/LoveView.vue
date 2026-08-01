@@ -136,7 +136,8 @@ const setupRomanticInteractions = () => {
       }
     }
 
-    const cardMotion = !reduceMotion && timeCard
+    const desktopMotionStrength = reduceMotion ? 0.38 : 1;
+    const cardMotion = finePointer && timeCard
       ? createAnimatable(timeCard, {
           x: { duration: 620, ease: "out(3)" },
           y: { duration: 620, ease: "out(3)" },
@@ -188,9 +189,9 @@ const setupRomanticInteractions = () => {
         const normalizedY = (event.clientY - rect.top) / rect.height - 0.5;
         heroStage.style.setProperty("--pointer-x", `${(normalizedX + 0.5) * 100}%`);
         heroStage.style.setProperty("--pointer-y", `${(normalizedY + 0.5) * 100}%`);
-        cardMotion?.x(normalizedX * 14);
-        cardMotion?.y(normalizedY * 10);
-        cardMotion?.rotate(normalizedX * 1.4);
+        cardMotion?.x(normalizedX * 14 * desktopMotionStrength);
+        cardMotion?.y(normalizedY * 10 * desktopMotionStrength);
+        cardMotion?.rotate(normalizedX * 1.4 * desktopMotionStrength);
         copyMotion?.x(normalizedX * -6);
         copyMotion?.y(normalizedY * -4);
       }
@@ -335,7 +336,7 @@ onUnmounted(() => {
         <aside class="time-card" aria-labelledby="timer-title">
           <span class="card-scan-line" aria-hidden="true"></span>
           <span class="panel-code">OURS · ∞</span>
-          <div class="time-emblem" aria-hidden="true">♥</div>
+          <div class="time-emblem" aria-hidden="true"><span>♥</span></div>
           <p class="time-kicker">TOGETHER FOR</p>
           <h2 id="timer-title">我们已经相爱</h2>
           <div class="timer-grid" role="timer" aria-label="我们已经相爱的时间">
