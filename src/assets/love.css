@@ -1,3 +1,60 @@
+@font-face {
+  font-family: "Love Kai";
+  src: url("./fonts/love-kai.woff2") format("woff2");
+  font-display: swap;
+  font-style: normal;
+  font-weight: 400;
+  unicode-range: U+5A46, U+8001;
+}
+
+@font-face {
+  font-family: "Love Sans";
+  src: url("./fonts/love-sans.woff2") format("woff2");
+  font-display: swap;
+  font-style: normal;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Love Sans";
+  src: url("./fonts/love-sans-semibold.woff2") format("woff2");
+  font-display: swap;
+  font-style: normal;
+  font-weight: 600;
+}
+
+@font-face {
+  font-family: "Love Serif";
+  src: url("./fonts/love-serif.woff2") format("woff2");
+  font-display: swap;
+  font-style: normal;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Love Serif";
+  src: url("./fonts/love-serif-semibold.woff2") format("woff2");
+  font-display: swap;
+  font-style: normal;
+  font-weight: 600;
+}
+
+@font-face {
+  font-family: "Love Mono";
+  src: url("./fonts/love-mono.woff2") format("woff2");
+  font-display: swap;
+  font-style: normal;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Love Mono";
+  src: url("./fonts/love-mono-semibold.woff2") format("woff2");
+  font-display: swap;
+  font-style: normal;
+  font-weight: 600;
+}
+
 :global(:root) {
   color-scheme: dark;
   --love-ink: #090916;
@@ -34,7 +91,7 @@
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
   color: var(--love-white);
-  font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  font-family: "Love Sans", sans-serif;
   background: var(--love-ink);
 }
 
@@ -140,7 +197,7 @@
 .sparkle {
   position: absolute;
   color: var(--love-cyan);
-  font-family: Georgia, serif;
+  font-family: "Love Serif", serif;
   text-shadow: 0 0 18px currentColor;
   animation: soft-spark 3.8s ease-in-out infinite;
 }
@@ -197,7 +254,7 @@
   right: 42px;
   bottom: 27px;
   color: rgba(163, 230, 255, 0.45);
-  font: 600 0.58rem/1 Consolas, monospace;
+  font: 600 0.58rem/1 "Love Mono", "Love Sans", monospace;
   letter-spacing: 0.24em;
 }
 
@@ -241,7 +298,7 @@
   padding-bottom: 17px;
   border-bottom: 1px solid rgba(166, 227, 255, 0.15);
   color: rgba(220, 239, 255, 0.56);
-  font: 600 0.62rem/1 Consolas, monospace;
+  font: 600 0.62rem/1 "Love Mono", "Love Sans", monospace;
   letter-spacing: 0.18em;
 }
 
@@ -398,7 +455,7 @@
   width: max-content;
   translate: -50% 0;
   color: rgba(145, 239, 255, 0.68);
-  font: 600 0.52rem/1 Consolas, monospace;
+  font: 600 0.52rem/1 "Love Mono", "Love Sans", monospace;
   letter-spacing: 0.26em;
 }
 
@@ -415,7 +472,7 @@
 .letter-copy > span,
 .final-copy > p {
   color: var(--love-cyan);
-  font: 650 clamp(0.62rem, 0.85vw, 0.72rem)/1.4 Consolas, monospace;
+  font: 650 clamp(0.62rem, 0.85vw, 0.72rem)/1.4 "Love Mono", "Love Sans", monospace;
   letter-spacing: 0.2em;
 }
 
@@ -451,7 +508,7 @@
 .hero-copy h1 strong {
   display: inline-flex;
   color: #dff9ff;
-  font-family: "STKaiti", "KaiTi", "FangSong", serif;
+  font-family: "Love Kai", "Love Serif", serif;
   font-size: clamp(6.2rem, 10.5vw, 9rem);
   font-weight: 400;
   letter-spacing: -0.13em;
@@ -501,7 +558,7 @@
   max-width: 570px;
   margin: 30px 0 0;
   color: rgba(244, 243, 255, 0.84);
-  font-family: "Songti SC", "SimSun", serif;
+  font-family: "Love Serif", serif;
   font-size: clamp(1rem, 1.4vw, 1.16rem);
   line-height: 2;
   text-shadow: 0 2px 18px rgba(3, 3, 14, 0.84);
@@ -519,7 +576,7 @@
   border-radius: 999px;
   color: rgba(255, 171, 213, 0.82);
   background: rgba(255, 88, 170, 0.07);
-  font: 600 0.58rem/1 Consolas, monospace;
+  font: 600 0.58rem/1 "Love Mono", "Love Sans", monospace;
   letter-spacing: 0.17em;
 }
 
@@ -575,7 +632,7 @@
   top: 26px;
   right: 26px;
   color: rgba(255, 150, 203, 0.72);
-  font: 600 0.54rem/1 Consolas, monospace;
+  font: 600 0.54rem/1 "Love Mono", "Love Sans", monospace;
   letter-spacing: 0.18em;
 }
 
@@ -683,17 +740,20 @@
 
 .time-card h2 {
   margin: 0 0 24px;
-  font-family: "Songti SC", "SimSun", serif;
+  font-family: "Love Serif", serif;
   font-size: clamp(1.2rem, 1.8vw, 1.52rem);
   font-weight: 500;
   letter-spacing: 0.04em;
 }
 
 .timer-grid {
+  --timer-gap: 12px;
+  --timer-colon-offset: -6px;
+
   position: relative;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
+  gap: var(--timer-gap);
 }
 
 .time-unit {
@@ -731,7 +791,7 @@
 .time-unit strong {
   min-width: 2ch;
   color: rgba(246, 247, 255, 0.94);
-  font: 400 clamp(1.4rem, 2.4vw, 1.82rem)/1 Consolas, monospace;
+  font: 400 clamp(1.4rem, 2.4vw, 1.82rem)/1 "Love Mono", "Love Sans", monospace;
   font-variant-numeric: tabular-nums;
   text-align: center;
 }
@@ -741,7 +801,7 @@
   top: 10px;
   left: 50%;
   color: rgba(163, 218, 242, 0.38);
-  font: 600 0.46rem/1 Consolas, monospace;
+  font: 600 0.46rem/1 "Love Mono", "Love Sans", monospace;
   letter-spacing: 0.13em;
   translate: -50% 0;
   white-space: nowrap;
@@ -792,9 +852,9 @@
   position: absolute;
   z-index: 2;
   top: 50%;
-  right: -10px;
+  right: var(--timer-colon-offset);
   color: rgba(255, 133, 191, 0.7);
-  font: 400 1rem/1 Consolas, monospace;
+  font: 400 1rem/1 "Love Mono", "Love Sans", monospace;
   text-shadow: 0 0 10px rgba(255, 114, 182, 0.4);
   translate: 50% -50%;
 }
@@ -885,7 +945,7 @@
   z-index: 4;
   bottom: 30px;
   color: rgba(188, 220, 242, 0.5);
-  font: 600 0.54rem/1 Consolas, monospace;
+  font: 600 0.54rem/1 "Love Mono", "Love Sans", monospace;
   letter-spacing: 0.17em;
 }
 
@@ -959,7 +1019,7 @@
 .section-heading h2 {
   max-width: 700px;
   margin: 0;
-  font-family: "Songti SC", "SimSun", serif;
+  font-family: "Love Serif", serif;
   font-size: clamp(2.5rem, 5.4vw, 5rem);
   font-weight: 400;
   line-height: 1.18;
@@ -971,7 +1031,7 @@
   max-width: 440px;
   margin: 0 0 8px;
   color: var(--love-muted);
-  font-family: "Songti SC", "SimSun", serif;
+  font-family: "Love Serif", serif;
   font-size: clamp(0.94rem, 1.3vw, 1.08rem);
   line-height: 1.9;
   text-shadow: 0 2px 15px rgba(3, 3, 14, 0.8);
@@ -1010,7 +1070,7 @@
   right: 30px;
   bottom: 25px;
   color: rgba(145, 239, 255, 0.35);
-  font: 600 0.52rem/1 Consolas, monospace;
+  font: 600 0.52rem/1 "Love Mono", "Love Sans", monospace;
   letter-spacing: 0.15em;
 }
 
@@ -1051,20 +1111,20 @@
   border-radius: 50%;
   color: var(--love-cyan);
   background: rgba(145, 239, 255, 0.06);
-  font: 600 0.62rem/1 Consolas, monospace;
+  font: 600 0.62rem/1 "Love Mono", "Love Sans", monospace;
   box-shadow: 0 0 25px rgba(145, 239, 255, 0.06);
 }
 
 .memory-note small {
   color: rgba(207, 221, 246, 0.5);
-  font: 600 0.53rem/1.4 Consolas, monospace;
+  font: 600 0.53rem/1.4 "Love Mono", "Love Sans", monospace;
   letter-spacing: 0.12em;
   text-align: right;
 }
 
 .memory-note h3 {
   margin: clamp(68px, 8vw, 105px) 0 18px;
-  font-family: "Songti SC", "SimSun", serif;
+  font-family: "Love Serif", serif;
   font-size: clamp(2rem, 3.6vw, 3.3rem);
   font-weight: 400;
 }
@@ -1072,7 +1132,7 @@
 .memory-note p {
   margin: 0;
   color: rgba(232, 234, 252, 0.67);
-  font-family: "Songti SC", "SimSun", serif;
+  font-family: "Love Serif", serif;
   font-size: clamp(0.92rem, 1.25vw, 1.05rem);
   line-height: 1.9;
 }
@@ -1142,7 +1202,7 @@
 .terminal-bar b {
   margin: 0;
   color: rgba(205, 224, 246, 0.46);
-  font: 600 0.52rem/1 Consolas, monospace;
+  font: 600 0.52rem/1 "Love Mono", "Love Sans", monospace;
   letter-spacing: 0.2em;
 }
 
@@ -1169,7 +1229,7 @@
     linear-gradient(145deg, rgba(9, 23, 43, 0.94), rgba(39, 15, 49, 0.94)) padding-box,
     conic-gradient(from 205deg, var(--love-cyan), var(--love-violet) 45%, var(--love-pink) 72%, var(--love-cyan)) border-box;
   box-shadow: 0 0 0 7px rgba(145, 239, 255, 0.035), 0 16px 42px rgba(101, 91, 229, 0.2);
-  font-family: Georgia, serif;
+  font-family: "Love Serif", serif;
   font-size: 1.5rem;
   line-height: 1;
   text-shadow: 0 0 10px rgba(255, 155, 201, 0.72);
@@ -1213,7 +1273,7 @@
   align-self: center;
   margin: 0;
   color: rgba(145, 239, 255, 0.58);
-  font: 600 0.56rem/1 Consolas, monospace;
+  font: 600 0.56rem/1 "Love Mono", "Love Sans", monospace;
   letter-spacing: 0.26em;
   writing-mode: vertical-rl;
 }
@@ -1231,7 +1291,7 @@
 
 .letter-copy h2 {
   margin: 30px 0 28px;
-  font-family: "Songti SC", "SimSun", serif;
+  font-family: "Love Serif", serif;
   font-size: clamp(3rem, 6vw, 5.5rem);
   font-weight: 400;
   line-height: 1;
@@ -1240,7 +1300,7 @@
 .letter-copy p {
   margin: 0 0 14px;
   color: rgba(239, 239, 255, 0.75);
-  font-family: "Songti SC", "SimSun", serif;
+  font-family: "Love Serif", serif;
   font-size: clamp(1rem, 1.45vw, 1.18rem);
   line-height: 2.15;
 }
@@ -1249,7 +1309,7 @@
   display: block;
   margin-top: 28px;
   color: var(--love-rose);
-  font-family: "Songti SC", "SimSun", serif;
+  font-family: "Love Serif", serif;
   font-size: clamp(1.2rem, 2vw, 1.6rem);
   font-weight: 600;
 }
@@ -1323,7 +1383,7 @@
     linear-gradient(145deg, rgba(9, 23, 43, 0.94), rgba(39, 15, 49, 0.94)) padding-box,
     conic-gradient(from 205deg, var(--love-cyan), var(--love-violet) 45%, var(--love-pink) 72%, var(--love-cyan)) border-box;
   box-shadow: 0 0 0 9px rgba(145, 239, 255, 0.035), 0 0 42px rgba(154, 119, 255, 0.2);
-  font-family: Georgia, serif;
+  font-family: "Love Serif", serif;
   font-size: 1.55rem;
   line-height: 1;
   text-shadow: 0 0 10px rgba(255, 155, 201, 0.72);
@@ -1384,7 +1444,7 @@
   flex-direction: column;
   align-items: center;
   margin: 26px 0 28px;
-  font-family: "Songti SC", "SimSun", serif;
+  font-family: "Love Serif", serif;
   font-weight: 400;
   line-height: 1.08;
   text-shadow: 0 12px 40px rgba(2, 2, 13, 0.78);
@@ -1421,7 +1481,7 @@
   border-radius: 999px;
   color: rgba(184, 219, 239, 0.55);
   background: rgba(9, 12, 30, 0.42);
-  font: 600 0.57rem/1 Consolas, monospace;
+  font: 600 0.57rem/1 "Love Mono", "Love Sans", monospace;
   letter-spacing: 0.2em;
 }
 
@@ -1443,7 +1503,7 @@
   color: white;
   background: linear-gradient(120deg, rgba(10, 15, 38, 0.9), rgba(50, 20, 55, 0.86));
   box-shadow: 0 10px 30px rgba(5, 5, 20, 0.35), 0 0 22px rgba(255, 114, 182, 0.14);
-  font: 650 0.7rem/1 Consolas, "Microsoft YaHei", sans-serif;
+  font: 650 0.7rem/1 "Love Mono", "Love Sans", monospace;
   letter-spacing: 0.1em;
   translate: -50% -50%;
   will-change: transform, opacity;
@@ -1720,16 +1780,13 @@
   }
 
   .timer-grid {
-    gap: 10px;
+    --timer-gap: 10px;
+    --timer-colon-offset: -5px;
   }
 
   .time-days {
     min-height: 124px;
     border-radius: 16px;
-  }
-
-  .time-unit:not(.time-days):not(:last-child)::after {
-    right: -9px;
   }
 
   .scroll-hint {
