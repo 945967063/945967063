@@ -3,7 +3,7 @@ import { ref } from "vue";
 
 const emit = defineEmits<{ loaded: [] }>();
 const isLoaded = ref(false);
-const wallpaperUrl = `https://img.lileyi.de/random?type=img&orientation=auto&t=${Date.now()}`;
+const wallpaperUrl = `https://img.lileyi.de/random?dir=random&type=img&orientation=auto&t=${Date.now()}`;
 
 const handleLoad = () => {
   isLoaded.value = true;
@@ -51,8 +51,11 @@ const handleLoad = () => {
 .wallpaper-overlay {
   position: absolute;
   inset: 0;
-  background:
-    radial-gradient(circle at center, rgba(5, 5, 8, 0.12), rgba(5, 5, 8, 0.5)),
+  background: radial-gradient(
+      circle at center,
+      rgba(5, 5, 8, 0.12),
+      rgba(5, 5, 8, 0.5)
+    ),
     linear-gradient(rgba(5, 5, 8, 0.22), rgba(5, 5, 8, 0.42));
 }
 
