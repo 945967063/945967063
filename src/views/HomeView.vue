@@ -8,7 +8,7 @@ import RainBackground from "../components/RainBackground.vue";
 
 gsap.registerPlugin(SplitText);
 
-type ServiceId = "image" | "probe" | "mail" | "love" | "ledger";
+type ServiceId = "image" | "probe" | "mail" | "love";
 
 interface Service {
   id: ServiceId;
@@ -43,12 +43,6 @@ const services: Service[] = [
     englishName: "For My Love",
     href: "/love",
     internal: true,
-  },
-  {
-    id: "ledger",
-    name: "人情往来",
-    englishName: "Gift Ledger",
-    href: "https://rq.lileyi.de/",
   },
 ];
 
@@ -128,18 +122,16 @@ onMounted(async () => {
 
     const buttonOrigins = isMobile
       ? [
-          { x: -48, y: 0 },
-          { x: 0, y: -42 },
-          { x: 48, y: 0 },
-          { x: -34, y: 48 },
-          { x: 34, y: 48 },
+          { x: -48, y: -18 },
+          { x: -16, y: -42 },
+          { x: 16, y: -42 },
+          { x: 48, y: -18 },
         ]
       : [
-          { x: -100, y: 0 },
-          { x: 0, y: -72 },
-          { x: 100, y: 0 },
-          { x: -64, y: 78 },
-          { x: 64, y: 78 },
+          { x: -88, y: -28 },
+          { x: -28, y: -72 },
+          { x: 28, y: -72 },
+          { x: 88, y: -28 },
         ];
 
     const intro = gsap
@@ -783,10 +775,6 @@ button {
   text-shadow: 0 2px 10px rgba(0, 0, 0, 0.74);
   transition: color 0.32s ease, background 0.32s ease, border-color 0.32s ease,
     box-shadow 0.32s ease, transform 0.32s cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-
-.home-link:nth-child(n + 4) {
-  min-width: 90px;
 }
 
 .home-link::before {
